@@ -11,8 +11,8 @@ import com.zdzhai.example.common.service.UserService;
 public class EasyConsumerExample {
 
     public static void main(String[] args) {
-        // todo 需要获取userService的实现类对象
-        UserService userService = null;
+        //UserService userService = new UserServiceProxy();
+        UserService userService = ServiceProxyFactory.getProxy(UserService.class);
         User user = new User();
         user.setName("zdzhai");
         //调用
