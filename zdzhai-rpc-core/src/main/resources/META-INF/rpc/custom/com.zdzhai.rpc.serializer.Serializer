@@ -1,0 +1,2 @@
+a=com.zdzhai.rpc.serializer.JdkSerializer
+b=com.zdzhai.rpc.serializer.HessianSerializer

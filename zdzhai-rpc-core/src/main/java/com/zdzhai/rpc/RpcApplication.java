@@ -26,7 +26,7 @@ public class RpcApplication {
     }
 
     /**
-     * 框架初始化
+     * 框架初始化，读取配置文件
      */
     public static void init() {
         RpcConfig newRpcConfig;

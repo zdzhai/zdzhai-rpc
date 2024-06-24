@@ -1,5 +1,6 @@
 package com.zdzhai.rpc.config;
 
+import com.zdzhai.rpc.serializer.SerializerKeys;
 import lombok.Data;
 
 /**
@@ -34,4 +35,9 @@ public class RpcConfig {
      * 是否开启mock模拟调用,默认关闭
      */
     private boolean mock = false;
+
+    /**
+     * 序列化器
+     */
+    private String serializer = SerializerKeys.JDK;
 }

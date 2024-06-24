@@ -1,10 +1,12 @@
 package com.zdzhai.rpc.server;
 
+import com.zdzhai.rpc.RpcApplication;
 import com.zdzhai.rpc.model.RpcRequest;
 import com.zdzhai.rpc.model.RpcResponse;
 import com.zdzhai.rpc.registry.LocalRegistry;
 import com.zdzhai.rpc.serializer.JdkSerializer;
 import com.zdzhai.rpc.serializer.Serializer;
+import com.zdzhai.rpc.serializer.SerializerFactory;
 import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpServerRequest;
@@ -29,7 +31,7 @@ public class HttpServerHandler implements Handler<HttpServerRequest> {
     @Override
     public void handle(HttpServerRequest request) {
         //指定序列化器
-        Serializer serializer = new JdkSerializer();
+        final Serializer serializer = SerializerFactory.getInstance(RpcApplication.getRpcConfig().getSerializer());
 
         //记录日志
         System.out.println("Received request:" + request.method() + " " + request.uri());
@@ -37,7 +39,7 @@ public class HttpServerHandler implements Handler<HttpServerRequest> {
         //异步处理http请求
         request.bodyHandler(body -> {
             byte[] bytes = body.getBytes();
-            System.out.println("HttpServerHandler:" + Arrays.toString(bytes));
+            //System.out.println("HttpServerHandler:" + Arrays.toString(bytes));
             RpcRequest rpcRequest = null;
 
             try {
@@ -56,7 +58,7 @@ public class HttpServerHandler implements Handler<HttpServerRequest> {
             }
             try {
                 Class<?> implClass = LocalRegistry.get(rpcRequest.getServiceName());
-                Method method = implClass.getMethod(rpcRequest.getMethodName());
+                Method method = implClass.getMethod(rpcRequest.getMethodName(), rpcRequest.getParameterType());
                 Object result = method.invoke(implClass.newInstance(), rpcRequest.getArgs());
                 //封装返回结果
                 rpcResponse.setData(result);
