@@ -1,0 +1,1 @@
+etcd=com.zdzhai.rpc.registry.EtcdRegistry

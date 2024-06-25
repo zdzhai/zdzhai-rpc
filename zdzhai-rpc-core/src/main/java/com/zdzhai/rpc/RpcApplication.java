@@ -1,7 +1,10 @@
 package com.zdzhai.rpc;
 
+import com.zdzhai.rpc.config.RegistryConfig;
 import com.zdzhai.rpc.config.RpcConfig;
 import com.zdzhai.rpc.constant.RpcConstant;
+import com.zdzhai.rpc.registry.Registry;
+import com.zdzhai.rpc.registry.RegistryFactory;
 import com.zdzhai.rpc.utils.ConfigUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,6 +26,10 @@ public class RpcApplication {
     public static void init(RpcConfig newRpcConfig) {
         rpcConfig = newRpcConfig;
         log.info("rpc init, config = {}", rpcConfig.toString());
+        //注册中心初始化
+        RegistryConfig registryConfig = rpcConfig.getRegistryConfig();
+        Registry registry = RegistryFactory.getInstance(registryConfig.getRegistry());
+        registry.init(registryConfig);
     }
 
     /**

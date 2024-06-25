@@ -27,7 +27,7 @@ public class RpcConfig {
     private String serverHost = "localhost";
 
     /**
-     * 服务器端口号
+     * 服务器端口号 默认8080
      */
     private Integer serverPort = 8080;
 
@@ -40,4 +40,10 @@ public class RpcConfig {
      * 序列化器
      */
     private String serializer = SerializerKeys.JDK;
+
+    /**
+     * 注册中心配置
+     * todo 使用读取配置文件的方式创建
+     */
+    private RegistryConfig registryConfig = new RegistryConfig();
 }
