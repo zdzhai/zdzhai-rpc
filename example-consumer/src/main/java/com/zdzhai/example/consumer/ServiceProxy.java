@@ -14,6 +14,7 @@ import com.zdzhai.rpc.registry.RegistryFactory;
 import com.zdzhai.rpc.serializer.JdkSerializer;
 import com.zdzhai.rpc.serializer.Serializer;
 import com.zdzhai.rpc.serializer.SerializerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
@@ -27,6 +28,7 @@ import java.util.List;
  * 静态代理需要为每一个服务都实现一个代理类，很麻烦
  * 这里使用动态代理来动态生成接口的代理类
  */
+@Slf4j
 public class ServiceProxy implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
@@ -48,15 +50,20 @@ public class ServiceProxy implements InvocationHandler {
             //请求地址被硬编码了，需要使用注册中心和服务发现机制解决
             RpcConfig rpcConfig = RpcApplication.getRpcConfig();
             Registry registry = RegistryFactory.getInstance(rpcConfig.getRegistryConfig().getRegistry());
+            log.info("registry {}", System.identityHashCode(registry));
+
             ServiceMetaInfo serviceMetaInfo = new ServiceMetaInfo();
             serviceMetaInfo.setServiceName(serviceName);
             serviceMetaInfo.setServiceVersion(RpcConstant.DEFAULT_SERVICE_VERSION);
+
             List<ServiceMetaInfo> serviceMetaInfoList = registry.serviceDiscovery(serviceMetaInfo.getServiceKey());
             if (CollUtil.isEmpty(serviceMetaInfoList)) {
                 throw new RuntimeException("暂无服务地址");
             }
             //todo 可能会存在多个节点，暂时取第一个，后续做负载均衡
             ServiceMetaInfo selectedServiceMetaInfo = serviceMetaInfoList.get(0);
+            log.info("消费者请求的服务节点为，{} 服务名称为 {}，服务方法为 {}",
+                    selectedServiceMetaInfo.getServiceAddress(), serviceName, method.getName());
 
             try (HttpResponse httpResponse = HttpRequest.post(selectedServiceMetaInfo.getServiceAddress())
                     .body(bodyBytes)

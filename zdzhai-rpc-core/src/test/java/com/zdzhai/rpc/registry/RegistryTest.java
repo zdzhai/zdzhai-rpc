@@ -22,6 +22,8 @@ public class RegistryTest{
         RegistryConfig registryConfig = new RegistryConfig();
         registryConfig.setAddress("http://localhost:2380");
         etcdRegistry.init(registryConfig);
+        //创建并注册ShutDown Hook, JVM退出时执行操作
+        Runtime.getRuntime().addShutdownHook(new Thread(etcdRegistry::destroy));
     }
 
     @Test
@@ -69,6 +71,12 @@ public class RegistryTest{
         String serviceKey = serviceMetaInfo.getServiceKey();
         List<ServiceMetaInfo> serviceMetaInfoList = etcdRegistry.serviceDiscovery(serviceKey);
         Assert.assertNotNull(serviceMetaInfoList);
+    }
+
+    @Test
+    public void testHeartBeat() throws Exception {
+        testRegister();
+        Thread.sleep(60 * 5000L);
     }
 
 }

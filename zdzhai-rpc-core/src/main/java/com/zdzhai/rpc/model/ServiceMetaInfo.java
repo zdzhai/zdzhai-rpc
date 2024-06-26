@@ -48,8 +48,12 @@ public class ServiceMetaInfo {
         return String.format("%s/%s:%s", getServiceKey(), serviceHost, servicePort);
     }
 
+    /**
+     * 获取服务地址
+     * @return
+     */
     public String getServiceAddress() {
-        if (StrUtil.contains(serviceHost, "http")) {
+        if (!StrUtil.contains(serviceHost, "http")) {
             return String.format("http://%s:%s", serviceHost, servicePort);
         }
         return String.format("%s:%s", serviceHost, servicePort);

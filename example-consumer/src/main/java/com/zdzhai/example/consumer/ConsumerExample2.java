@@ -13,26 +13,22 @@ import lombok.extern.slf4j.Slf4j;
  * @Date 2024/6/22 22:29
  */
 @Slf4j
-public class ConsumerExample {
+public class ConsumerExample2 {
     public static void main(String[] args) {
 
         RpcConfig rpcConfig = RpcApplication.getRpcConfig();
         log.info("消费端获取rpcConfig成功：{}", rpcConfig);
 
-        UserService userService = ServiceProxyFactory.getProxy(UserService.class);
+        OrderService orderService = ServiceProxyFactory.getProxy(OrderService.class);
 
-        //测试调用userService.getNumber()方法，是否Mock
-        //short number = userService.getNumber();
-        log.info("消费端 {} mock测试", rpcConfig.isMock() ? "开启" : "未开启");
-
-        User user = new User();
-        user.setName("zdzhai");
+        Order order = new Order();
+        order.setOrderId(0000L);
         //调用
-        User newUser = userService.getUser(user);
-        if (newUser != null) {
-            System.out.println("user:" + newUser.getName());
+        Order newOrder = orderService.getOrder(order);
+        if (newOrder != null) {
+            System.out.println("newOrder:" +newOrder.getOrderId());
         } else {
-            System.out.println("user == null");
+            System.out.println("order == null");
         }
     }
 }

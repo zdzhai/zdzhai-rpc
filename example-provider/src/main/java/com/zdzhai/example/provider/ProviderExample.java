@@ -1,5 +1,6 @@
 package com.zdzhai.example.provider;
 
+import com.zdzhai.example.common.service.OrderService;
 import com.zdzhai.example.common.service.UserService;
 import com.zdzhai.rpc.RpcApplication;
 import com.zdzhai.rpc.config.RegistryConfig;
@@ -27,6 +28,10 @@ public class ProviderExample {
         String serviceName = UserService.class.getName();
         LocalRegistry.register(serviceName, UserServiceImpl.class);
 
+        //注册服务orderService
+        String orderServiceName = OrderService.class.getName();
+        LocalRegistry.register(orderServiceName, OrderServiceImpl.class);
+
         //注册服务到注册中心
         RpcConfig rpcConfig = RpcApplication.getRpcConfig();
         RegistryConfig registryConfig = rpcConfig.getRegistryConfig();
@@ -36,8 +41,14 @@ public class ProviderExample {
         serviceMetaInfo.setServiceName(serviceName);
         serviceMetaInfo.setServiceHost(rpcConfig.getServerHost());
         serviceMetaInfo.setServicePort(rpcConfig.getServerPort());
+
+        ServiceMetaInfo serviceMetaInfo2 = new ServiceMetaInfo();
+        serviceMetaInfo2.setServiceName(orderServiceName);
+        serviceMetaInfo2.setServiceHost(rpcConfig.getServerHost());
+        serviceMetaInfo2.setServicePort(rpcConfig.getServerPort());
         try {
             registryInstance.register(serviceMetaInfo);
+            registryInstance.register(serviceMetaInfo2);
         } catch (Exception e) {
             log.error("服务注册失败", e);
             throw new RuntimeException(e);

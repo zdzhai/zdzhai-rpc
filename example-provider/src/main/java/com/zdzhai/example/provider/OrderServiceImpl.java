@@ -1,6 +1,8 @@
 package com.zdzhai.example.provider;
 
+import com.zdzhai.example.common.model.Order;
 import com.zdzhai.example.common.model.User;
+import com.zdzhai.example.common.service.OrderService;
 import com.zdzhai.example.common.service.UserService;
 
 /**
@@ -8,12 +10,11 @@ import com.zdzhai.example.common.service.UserService;
  * @Date 2024/6/20 20:58
  * 实现用户服务类，打印用户名称并返回用户对象
  */
-public class UserServiceImpl implements UserService {
+public class OrderServiceImpl implements OrderService {
 
     @Override
-    public User getUser(User user) {
-        System.out.println("用户名：" + user.getName());
-        user.setName(user.getName() + "new");
-        return user;
+    public Order getOrder(Order order) {
+        order.setOrderId(1000L);
+        return order;
     }
 }
