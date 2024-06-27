@@ -11,6 +11,7 @@ import com.zdzhai.rpc.registry.Registry;
 import com.zdzhai.rpc.registry.RegistryFactory;
 import com.zdzhai.rpc.server.HttpServer;
 import com.zdzhai.rpc.server.VertxHttpServer;
+import com.zdzhai.rpc.server.tcp.VertxTcpServer;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -54,9 +55,13 @@ public class ProviderExample {
             throw new RuntimeException(e);
         }
 
-        //启动Web服务
+        //启动TCP服务
+        VertxTcpServer vertxTcpServer = new VertxTcpServer();
+        vertxTcpServer.doStart(RpcApplication.getRpcConfig().getServerPort());
+
+        /*//启动Web服务
         HttpServer server = new VertxHttpServer();
-        server.doStart(RpcApplication.getRpcConfig().getServerPort());
+        server.doStart(RpcApplication.getRpcConfig().getServerPort());*/
     }
 
 }

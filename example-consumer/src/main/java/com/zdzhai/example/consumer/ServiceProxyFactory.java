@@ -2,6 +2,7 @@ package com.zdzhai.example.consumer;
 
 import com.zdzhai.rpc.RpcApplication;
 import com.zdzhai.rpc.proxy.MockServiceProxy;
+import com.zdzhai.rpc.proxy.ServiceProxy;
 
 import java.lang.reflect.Proxy;
 
